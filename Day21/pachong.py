@@ -44,7 +44,7 @@ def XPath(driver1):
         print(a)
         src.append(a)
     print(len(src))
-    time_list=driver1.find_elements_by_xpath('//div[@class="video-list row"]//div[@class="bili-video-card"]/div[2]//div[@class="bili-video-card__stats"]/span[@class="bili-video-card__stats__duration"]')
+    time_list=driver1.find_elements_by_xpath('//div[contains(@class,"video-list-item col_3 col_xs_1_5 col_md_2 col_xl_1_7")]//div[@class="bili-video-card"]/div[2]//div[@class="bili-video-card__mask"]//span[@class="bili-video-card__stats__duration"]')
     timed=[]
     for s in time_list:
         a=s.text
@@ -65,19 +65,19 @@ def XPath(driver1):
     #
     #     driver.close()
     driver1.close()
-    # return name, src, present, author, price, image
+    return name, src,timed
 
 
-def INmysql(name, src, present, author, price, image):
+def INmysql(name, src,timed):
     db = pymysql.Connect(host='localhost', user='root', password='123456', port=3306, db='spider')
     cursor = db.cursor()
-    try:
-        for i in range(len(name)):
-            cursor.execute("insert into dushubook(name,image,src,present,price,author) values(%s,%s,%s,%s,%s,%s)",
-                           (name[i], image[i], src[i], present[i], price[i], author[i]))
-            db.commit()
-    except:
-        print("出错啦！")
+    # try:
+    for i in range(len(name)):
+        cursor.execute("insert into bilibili(name,src,time) values(%s,%s,%s)",
+                       (name[i], src[i], timed[i]))
+        db.commit()
+    # except:
+    #     print("出错啦！")
     cursor.close()
     db.close()
 
@@ -96,8 +96,8 @@ if __name__ == '__main__':
         url = 'https://search.bilibili.com/all?keyword=%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AF%BE%E7%A8%8B&from_source=webtop_search&spm_id_from=333.1007&page=' + str(i)
         driver = get_data(url)
         XPath(driver)
-        # name, src, present, author, price, image = XPath(driver)
-        # INmysql(name, src, present, author, price, image)
+        # name, src,timed = XPath(driver)
+        # INmysql(name, src,timed)
         # INMongo(name, src, present, author, price, image)
 
 
