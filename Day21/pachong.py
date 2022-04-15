@@ -15,7 +15,7 @@ def get_data(url):
     # brower=webdriver.Chrome(executable_path=path,options=options)
     brower=webdriver.Chrome(options=options)
     brower.get(url)
-    time.sleep(3)
+    # time.sleep(3)
     js = 'document.documentElement.scrollTop=100000'
     brower.execute_script(js)
     # print(brower.page_source)
